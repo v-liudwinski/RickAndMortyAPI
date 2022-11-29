@@ -40,6 +40,6 @@ public class RickAndMortyController : Controller
         var character = await _rickAndMortyService.GetCharacterAsync(name);
         if (character is null) return NotFound();
         var dto = character.ToDto();
-        return Ok(character);
+        return Ok(dto);
     }
 }
