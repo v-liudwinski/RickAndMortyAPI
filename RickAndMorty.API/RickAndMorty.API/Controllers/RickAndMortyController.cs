@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RickAndMorty.API.Extensions;
+using RickAndMorty.API.RequestForms;
 using RickAndMorty.API.ResponseForms;
 using RickAndMorty.BLL;
-using RickAndMorty.BLL.Extensions;
-using RickAndMorty.DTO.RequestForms;
 
 namespace RickAndMorty.API.Controllers;
 
@@ -28,7 +28,8 @@ public class RickAndMortyController : Controller
         {
             PersonName = character.Name,
             EpisodeName = episode.Name,
-            IsPersonInEpisode = _rickAndMortyService.IsCharacterInEpisode(checkPerson).Result
+            IsPersonInEpisode = _rickAndMortyService
+                .IsCharacterInEpisode(checkPerson.PersonName, checkPerson.EpisodeName).Result
         };
         return Ok(response);
     }
@@ -39,7 +40,7 @@ public class RickAndMortyController : Controller
     {
         var character = await _rickAndMortyService.GetCharacterAsync(name);
         if (character is null) return NotFound();
-        var dto = character.ToDto();
+        var dto = character.ToResponse();
         return Ok(dto);
     }
 }

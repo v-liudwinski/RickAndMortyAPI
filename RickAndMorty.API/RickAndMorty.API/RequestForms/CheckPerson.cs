@@ -1,4 +1,4 @@
-﻿namespace RickAndMorty.DTO.RequestForms;
+﻿namespace RickAndMorty.API.RequestForms;
 
 public class CheckPerson
 {

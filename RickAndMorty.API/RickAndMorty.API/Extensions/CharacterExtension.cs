@@ -1,11 +1,11 @@
-﻿using RickAndMorty.DAL.Models;
-using RickAndMorty.DTO.DTOs;
+﻿using RickAndMorty.API.DTOs;
+using RickAndMorty.BLL.Models;
 
-namespace RickAndMorty.BLL.Extensions;
+namespace RickAndMorty.API.Extensions;
 
 public static class CharacterExtension
 {
-    public static CharacterDTO ToDto(this Character character)
+    public static CharacterDTO ToResponse(this Character character)
     {
         return new CharacterDTO
         {

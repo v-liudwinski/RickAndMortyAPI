@@ -1,4 +1,4 @@
-﻿namespace RickAndMorty.DAL.Models;
+﻿namespace RickAndMorty.BLL.Models;
 
 public class Character
 {

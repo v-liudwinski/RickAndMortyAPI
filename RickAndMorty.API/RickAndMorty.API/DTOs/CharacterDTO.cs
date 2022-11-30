@@ -1,6 +1,6 @@
-﻿using RickAndMorty.DAL.Models;
+﻿using RickAndMorty.BLL.Models;
 
-namespace RickAndMorty.DTO.DTOs;
+namespace RickAndMorty.API.DTOs;
 
 public class CharacterDTO
 {

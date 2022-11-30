@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
-using RickAndMorty.DAL.Models;
-using RickAndMorty.DTO.RequestForms;
+using RickAndMorty.BLL.Models;
 
 namespace RickAndMorty.BLL;
 
@@ -13,11 +12,11 @@ public class RickAndMortyClient : IRickAndMortyClient
         _httpClientFactory = httpClientFactory;
     }
 
-    public async Task<bool> IsCharacterInEpisode(CheckPerson checkPerson)
+    public async Task<bool> IsCharacterInEpisode(string personName, string episodeName)
     {
-        var character = await GetCharacterAsync(checkPerson.PersonName);
-        var episode = await GetEpisodeAsync(checkPerson.EpisodeName); 
-        if (character is null || episode is null) return false;
+        var character = await GetCharacterAsync(personName);
+        var episode = await GetEpisodeAsync(episodeName); 
+        if (character is null || episode is null) return default;
         return episode.Characters.Any(x => x == character.Url);
     }
 
@@ -26,10 +25,10 @@ public class RickAndMortyClient : IRickAndMortyClient
         var client = _httpClientFactory.CreateClient("rickAndMorty");
         var response = await client.GetAsync
             ($"{client.BaseAddress}/character/?name={name.ToLower()}");
-        if (!response.IsSuccessStatusCode) return null;
+        if (!response.IsSuccessStatusCode) return default;
         var json = await response.Content.ReadAsStringAsync();
         var characterResponse = JsonConvert.DeserializeObject<CharacterResponse>(json);
-        return characterResponse.Results.First();
+        return characterResponse.Results.FirstOrDefault();
     }
 
     public async Task<Episode?> GetEpisodeAsync(string name)
@@ -37,9 +36,9 @@ public class RickAndMortyClient : IRickAndMortyClient
         var client = _httpClientFactory.CreateClient("rickAndMorty");
         var response = await client.GetAsync
             ($"{client.BaseAddress}/episode/?name={name.ToLower()}");
-        if (!response.IsSuccessStatusCode) return null;
+        if (!response.IsSuccessStatusCode) return default;
         var json = await response.Content.ReadAsStringAsync();
         var episodeResponse = JsonConvert.DeserializeObject<EpisodeResponse>(json);
-        return episodeResponse.Results.First();
+        return episodeResponse.Results.FirstOrDefault();
     }
 }
