@@ -30,7 +30,7 @@ public class RickAndMortyClient : IRickAndMortyClient
         var characterResponse = JsonConvert.DeserializeObject<CharacterResponse>(json);
         return characterResponse.Results.FirstOrDefault();
     }
-
+    
     public async Task<Episode?> GetEpisodeAsync(string name)
     {
         var client = _httpClientFactory.CreateClient("rickAndMorty");

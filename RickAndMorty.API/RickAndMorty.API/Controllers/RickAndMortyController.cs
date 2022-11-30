@@ -10,25 +10,25 @@ namespace RickAndMorty.API.Controllers;
 [Route("api/v1/")]
 public class RickAndMortyController : Controller
 {
-    private readonly IRickAndMortyClient _rickAndMortyService;
-
-    public RickAndMortyController(IRickAndMortyClient rickAndMortyService)
+    private readonly IRickAndMortyClient _rickAndMortyClient;
+    
+    public RickAndMortyController(IRickAndMortyClient rickAndMortyClient)
     {
-        _rickAndMortyService = rickAndMortyService;
+        _rickAndMortyClient = rickAndMortyClient;
     }
 
     [HttpPost]
     [Route("check-person")]
-    public async Task<IActionResult> IsPersonInEpisode(CheckPerson checkPerson)
+    public async Task<IActionResult> IsPersonInEpisode([FromBody] CheckPerson checkPerson)
     {
-        var character = await _rickAndMortyService.GetCharacterAsync(checkPerson.PersonName);
-        var episode = await _rickAndMortyService.GetEpisodeAsync(checkPerson.EpisodeName);
+        var character = await _rickAndMortyClient.GetCharacterAsync(checkPerson.PersonName);
+        var episode = await _rickAndMortyClient.GetEpisodeAsync(checkPerson.EpisodeName);
         if (character is null || episode is null) return NotFound();
         var response = new CheckPersonResponse
         {
             PersonName = character.Name,
             EpisodeName = episode.Name,
-            IsPersonInEpisode = _rickAndMortyService
+            IsPersonInEpisode = _rickAndMortyClient
                 .IsCharacterInEpisode(checkPerson.PersonName, checkPerson.EpisodeName).Result
         };
         return Ok(response);
@@ -38,7 +38,7 @@ public class RickAndMortyController : Controller
     [Route("person")]
     public async Task<IActionResult> GetCharacterAsync(string name)
     {
-        var character = await _rickAndMortyService.GetCharacterAsync(name);
+        var character = await _rickAndMortyClient.GetCharacterAsync(name);
         if (character is null) return NotFound();
         var dto = character.ToResponse();
         return Ok(dto);

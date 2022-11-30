@@ -10,7 +10,7 @@ RUN dotnet publish "./RickAndMorty.API/RickAndMorty.API/RickAndMorty.API.csproj"
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal
 WORKDIR /app
 
-EXPOSE 80
+EXPOSE 8075/tcp
 COPY --from=build /app/out .
 
 ENTRYPOINT [ "dotnet", "RickAndMorty.API.dll" ]
