@@ -10,6 +10,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IRickAndMortyClient, RickAndMortyClient>();
+builder.Services.AddScoped<ICacheService, CacheService>();
+
+builder.Services.AddMemoryCache(options =>
+{
+    options.ExpirationScanFrequency = TimeSpan.FromDays(7);
+});
 
 builder.Services.AddHttpClient("rickAndMorty", client =>
 {
