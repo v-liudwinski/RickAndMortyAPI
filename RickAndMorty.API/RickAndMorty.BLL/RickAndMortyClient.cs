@@ -6,10 +6,12 @@ namespace RickAndMorty.BLL;
 public class RickAndMortyClient : IRickAndMortyClient
 {
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ICacheService _cacheService;
 
-    public RickAndMortyClient(IHttpClientFactory httpClientFactory)
+    public RickAndMortyClient(IHttpClientFactory httpClientFactory, ICacheService cacheService)
     {
         _httpClientFactory = httpClientFactory;
+        _cacheService = cacheService;
     }
 
     public async Task<bool> IsCharacterInEpisode(string personName, string episodeName)
@@ -40,5 +42,15 @@ public class RickAndMortyClient : IRickAndMortyClient
         var json = await response.Content.ReadAsStringAsync();
         var episodeResponse = JsonConvert.DeserializeObject<EpisodeResponse>(json);
         return episodeResponse.Results.FirstOrDefault();
+    }
+
+    public async Task AddToCache<T>(string key, T value) where T : IModel
+    {
+        _cacheService.AddToCache(key, value);
+    }
+
+    public async Task<T?> GetFromCache<T>(string key) where T : IModel
+    {
+        return _cacheService.GetCached<T>(key);
     }
 }
